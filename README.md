@@ -6,6 +6,20 @@
 
 อ่านแนวคิด และที่มาที่ไปได้ที่นี่ [ระบบ Auto Complete ที่อยู่ไทย อย่างที่มันควรเป็น](https://medium.com/@earthchie/ระบบ-auto-complete-ที่อยู่ไทย-อย่างที่มันควรเป็น-27360185d86a)
 
+## ต้องการปรับปรุงฐานข้อมูล?
+คุณสามารถปรับปรุงข้อมูลได้ที่ [raw_database.json](https://github.com/earthchie/jquery.Thailand.js/blob/master/jquery.Thailand.js/database/raw_database/raw_database.json) จากนั้นนำไฟล์ที่แก้ไขแล้ว ไป compact ให้มีขนาดเล็กลงเพื่อให้นำไปใช้กับ Libary ได้ที่ [Database Tools](https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/database/tools/)
+
+## Changelog [1.5.3.5]
+> 23 กันยายน 2018
+- ต.บางวัว อ.บางปะกง เปลี่ยนรหัสไปรษณีย์เป็น 24130
+
+ปรับปรุงฐานข้อมูลตาม [#29](https://github.com/earthchie/jquery.Thailand.js/issues/29)
+- ต.เกาะเต่า อ.เกาะพงัน เพิ่มรหัสไปรษณีย์ 84360
+- ต.ฉลอง, ต.ราไวย์ อ.เมืองภูเก็ต เพิ่มรหัสไปรษณีย์ 83130
+- ต.โคกม่วง อ.คลองหอยโข่ง เพิ่มรหัสไปรษณีย์ 90115
+
+[1.5.3.5]: https://github.com/earthchie/jquery.Thailand.js/commit/808d5e143a8fe3ae9339bd1d54a28b7b044b93e2
+
 ## Changelog [1.5.3.4]
 > 27 กุมภาพันธ์ 2018
 - แขวงวังใหม่ เพิ่มรหัสไปรษณีย์ 10110 (อาคารเพลินจิตเซ็นเตอร์), 10120 (อาคารลุมพินีทาวเวอร์), 10400 (อาคารวิทยุคอมเพล็กซ์ และอื่นๆ), 10500 (ศาลแขวงปทุมวัน)
@@ -68,15 +82,16 @@
 
 ```html
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="./jquery.Thailand.js/dependencies/JQL.min.js"></script>
-<script type="text/javascript" src="./jquery.Thailand.js/dependencies/typeahead.bundle.js"></script>
+<script type="text/javascript" src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dependencies/JQL.min.js"></script>
+<script type="text/javascript" src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dependencies/typeahead.bundle.js"></script>
+    
 ```
 
 2. ติดตั้ง jquery.Thailand.js
 
 ```html
-<link rel="stylesheet" href="./jquery.Thailand.js/dist/jquery.Thailand.min.css">
-<script type="text/javascript" src="./jquery.Thailand.js/dist/jquery.Thailand.min.js"></script>
+<link rel="stylesheet" href="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dist/jquery.Thailand.min.css">
+<script type="text/javascript" src="https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/dist/jquery.Thailand.min.js"></script>
 ```
 
 3. สร้าง input สำหรับกรอก ตำบล, อำเภอ, จังหวัด, รหัสไปรษณีย์
@@ -397,6 +412,19 @@ $.Thailand({
     // (ไม่ระบุก็ได้หากไม่จำเป็นต้องใช้)
     onLoad: function(){ 
         console.info('Autocomplete is ready!');
+    },
+
+    // object templates ใช้สำหรับ render dataset ใน typeahead.js
+    // สามารถอ่านเพิ่มเติมได้ที่ field templates ใน https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md#datasets
+    // (ไม่ระบุก็ได้หากไม่จำเป็นต้องใช้)
+    templates: {
+        empty: ' ',
+        suggestion: function (data) {
+            if (data.zipcode) {
+                data.zipcode = ' » ' + data.zipcode;
+            }
+            return '<div>' + data.district + ' » ' + data.amphoe + ' » ' + data.province + data.zipcode + '</div>';
+        }
     }
 });
 ```
@@ -405,9 +433,6 @@ $.Thailand({
 คือ path ที่เก็บไฟล์ ``z-worker.js`` และ ``inflate.js`` โดยปกติไม่จำเป็นต้องยุ่งกับค่านี้เลย ระบบจะ detect เอาเอง
 เว้นแต่ว่าจะพบ error แจ้งว่าหาไฟล์ ``z-worker.js`` และ ``inflate.js`` ไม่เจอ (ซึ่งไม่น่าเกิดขึ้นได้ เว้นแต่จะแยกไฟล์ ``zip.js`` ออกไปไว้คนละที่กัน)
 ถ้ามันแจ้ง error ว่าหาไฟล์ไม่เจอ ก็ค่อยให้ระบุค่าลงไป เช่น ``zip_worker_path: "./jquery.Thailand.js/dependencies/zip.js/",``
-
-## ต้องการปรับปรุงฐานข้อมูล?
-คุณสามารถปรับปรุงข้อมูลได้ที่ [raw_database.json](https://github.com/earthchie/jquery.Thailand.js/blob/master/jquery.Thailand.js/database/raw_database/raw_database.json) จากนั้นนำไฟล์ที่แก้ไขแล้ว ไป compact ให้มีขนาดเล็กลงเพื่อให้นำไปใช้กับ Libary ได้ที่ [Database Tools](https://earthchie.github.io/jquery.Thailand.js/jquery.Thailand.js/database/tools/)
 
 ## Contributers
 [earthchie](https://github.com/earthchie/) - Project Owner
